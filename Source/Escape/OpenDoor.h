@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "Components/AudioComponent.h"
 #include "CoreMinimal.h"
 #include "Engine/TriggerVolume.h"
 #include "OpenDoor.generated.h"
@@ -28,17 +29,23 @@ public:
 
 	UFUNCTION()
 		void OpenDoor(float DeltaTime);
-
 	UFUNCTION()
 		void CloseDoor(float DeltaTime);
+	UFUNCTION()
+		void FindAudioComponent();
+	UFUNCTION()
+		void FindPressurePlate();
+	UFUNCTION()
+		float TotalMassOfActors() const;
 
 private:
 
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		UAudioComponent* AudioComponent = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Interaction")
-	AActor* ActorThatOpens;
-
+		ATriggerVolume* PressurePlate = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Interaction")
-	ATriggerVolume* PressurePlate;
+		float TriggerMass = 50.f;
 
 	UPROPERTY()
 		float InitialYaw;
@@ -59,4 +66,7 @@ private:
 		float DoorOpenSpeed = 2.f;
 	UPROPERTY(EditInstanceOnly, Category = "DoorRotation")
 		float DoorCloseSpeed = 2.f;
+
+	UPROPERTY()
+		bool bDoorIsOpen = false;
 };

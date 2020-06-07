@@ -8,6 +8,11 @@
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
+struct FPlayerViewpoint
+{
+	FVector PlayerPosition;
+	FRotator PlayerRotation;
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ESCAPE_API UGrabber : public UActorComponent
@@ -26,9 +31,14 @@ protected:
 
 private:
 
+	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UPROPERTY()
 	UInputComponent* InputComponent = nullptr;
+	
+	FPlayerViewpoint PlayerViewpoint;
 
+	// Sets the players reach distance
 	UPROPERTY(EditAnywhere, Category = "Interaction")
 		float Reach = 100.f;
 
@@ -40,6 +50,10 @@ private:
 		void FindPhysicsHandle();
 	UFUNCTION()
 		void SetupInputComponent();
-	UFUNCTION() // Return first actor within reach with a physics body
-	FHitResult 	GetFirstPhysicsBodyInReach() const;
+	UFUNCTION() // Returns the players location and rotation
+		void UpdatePlayerViewpoint();
+	UFUNCTION() // Returns the first actor within the players reach with a physics body
+		FHitResult 	GetFirstPhysicsBodyInReach() const;
+	UFUNCTION() // Returns the players reach distance
+		FVector GetLineTraceEnd() const;
 };
